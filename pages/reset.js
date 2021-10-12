@@ -1,8 +1,10 @@
 import Link from "next/link"
+import CustomHead from "../components/CustomHead"
 import HeaderNotLogin from "../components/HeaderNotLogin"
 
 const ResetPass = () => {
     return <main className="absolute md:bg-gray-100 inset-0"> 
+    <CustomHead title="Reset Password"/>
     <HeaderNotLogin/>
     <div className="flex justify-center items-center">
         <div className="mt-24 border border-gray-500 m-5 md:w-2/6 rounded-md p-2 bg-gray-50">
