@@ -4,6 +4,8 @@ import Modal from '../components/Modal'
 import { useState } from 'react'
 
 export default function Login() {
+
+    const [successRegister, setSuccessRegister] = useState(false)
     const [openModal, setOpenModal] = useState(false)
     const setModalClose = () => {
         setOpenModal(false)
@@ -11,6 +13,11 @@ export default function Login() {
     const setModalOpen = () => {
         setOpenModal(true)
     }
+
+    const registerHandler = () => {
+      setSuccessRegister(true)
+    }
+
   return <>
   <CustomHead title="Index Page"/>
   <div className="h-screen grid md:grid-cols-2 md:bg-gray-100">
@@ -20,6 +27,9 @@ export default function Login() {
     </div>
     <div className="col-span-1 flex md:justify-center md:items-center sm:mt-4">
       <div className="rounded mx-4 md:mx-24 shadow-sm hover:shadow-lg border border-gray-300">
+        <div>
+            {successRegister && <p className="text-lg text-center ml-3 text-green-500 mt-3">Register success, please login.</p>}
+        </div>
         <form className="p-6 w-full md:w-96">
           <input className="mt-1 w-full rounded-md text-lg p-2 border border-gray-400" type="text" placeholder="Email / Username"/>
           <input className="mt-4 w-full rounded-md text-lg p-2 border border-gray-400" type="password" placeholder="Password" />
@@ -44,6 +54,6 @@ export default function Login() {
       </div>
     </div>
   </div>
- {openModal && <Modal onClose={setModalClose} />}
+ {openModal && <Modal onClose={setModalClose} onRegister={registerHandler} />}
   </>
 }
