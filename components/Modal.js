@@ -14,9 +14,8 @@ export default function Modal(props) {
 
     const handleRegister = async () => {
         setError(null)
+        setLoading(true)
         try{
-            setLoading(true)
-            
             const response = await axios.post('register', {
                 first_name: firstNameRef.current.value,
                 last_name: lastNameRef.current.value,
@@ -29,20 +28,14 @@ export default function Modal(props) {
                 props.onClose()
             }
         }catch(e){
-            setLoading(false)
             if(e.response.data.error){
-
                 if(e.response.data.error.first_name){
-                    //console.log(e.response.data.error.first_name[0])
                     setError(e.response.data.error.first_name[0])
                 }else if(e.response.data.error.last_name){
-                    //console.log(e.response.data.error.last_name[0])
                     setError(e.response.data.error.last_name[0])
                 }else if(e.response.data.error.email){
-                    //console.log(e.response.data.error.last_name[0])
                     setError(e.response.data.error.email[0])
                 }else if(e.response.data.error.password){
-                    //console.log(e.response.data.error.last_name[0])
                     setError(e.response.data.error.password[0])
                 }else{
                     setError("Error when register")

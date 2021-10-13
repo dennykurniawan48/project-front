@@ -1,12 +1,19 @@
 import CustomHead from '../components/CustomHead'
 import Link from 'next/link'
 import Modal from '../components/Modal'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
+import axios from 'axios'
 
 export default function Login() {
 
     const [successRegister, setSuccessRegister] = useState(false)
+    const [error, setError] = useState(null)
+    const [loading, setLoading] = useState(false)
     const [openModal, setOpenModal] = useState(false)
+
+    const emailRef = useRef()
+    const passwordRef = useRef()
+
     const setModalClose = () => {
         setOpenModal(false)
     }
@@ -17,6 +24,42 @@ export default function Login() {
     const registerHandler = () => {
       setSuccessRegister(true)
     }
+
+    const loginHandler = async () => {
+      setSuccessRegister(false)
+      setError(false)
+      setLoading(true)
+      try{
+          const response = await axios.post('login', {
+              email: emailRef.current.value,
+              password: passwordRef.current.value
+          })
+          if(response.data){
+              setError(null)
+              console.log(response)
+          }
+      }catch(e){
+        console.log(e)
+          if(e.response.data.error){
+              if(e.response.data.error.email){
+                  setError(e.response.data.error.email[0])
+              }else if(e.response.data.error.password){
+                  setError(e.response.data.error.password[0])
+              }else{
+                  setError("Error when login")
+              }
+          }
+          else{
+            setError("Error when login")
+          }
+          
+      }finally{
+          setLoading(false)
+      }
+    }
+
+    const color = loading ? "bg-gray-300":"bg-blue-500"
+    const isDisabled = loading ? "true" : ""
 
   return <>
   <CustomHead title="Index Page"/>
@@ -29,11 +72,15 @@ export default function Login() {
       <div className="rounded mx-4 md:mx-24 shadow-sm hover:shadow-lg border border-gray-300">
         <div>
             {successRegister && <p className="text-lg text-center ml-3 text-green-500 mt-3">Register success, please login.</p>}
+            
         </div>
         <form className="p-6 w-full md:w-96">
-          <input className="mt-1 w-full rounded-md text-lg p-2 border border-gray-400" type="text" placeholder="Email / Username"/>
-          <input className="mt-4 w-full rounded-md text-lg p-2 border border-gray-400" type="password" placeholder="Password" />
-          <button className="w-full p-2 mt-4 bg-blue-500 rounded text-white">Login</button>
+          <input ref={emailRef} className="mt-1 w-full rounded-md text-lg p-2 border border-gray-400" type="text" placeholder="Email / Username"/>
+          <input ref={passwordRef} className="mt-4 w-full rounded-md text-lg p-2 border border-gray-400" type="password" placeholder="Password" />
+          <div>
+            {error && <p className="text-sm text-center ml-3 text-red-500 mt-3">{error}</p>}
+          </div>
+          <button type="button" onClick={loginHandler} className={color + " w-full p-2 mt-4 rounded text-white"} disabled={isDisabled}>Login</button>
           <div className="my-4 flex justify-center text-blue-600 font-thin text-sm no-underline hover:underline">
             <Link href="/reset">Forgot password?</Link>
           </div>
