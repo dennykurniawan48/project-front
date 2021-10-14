@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import axios from 'axios'
 import HeaderNotLogin from '../components/HeaderNotLogin'
 import Constant from '../components/Constant'
+import Link from 'next/link'
 
 export default function Home(props) {
   const dispatch = useDispatch()
@@ -12,7 +13,14 @@ export default function Home(props) {
 
   console.log(props.data)
 
-  const data = props.data.map(item => <div className="ml-3 mt-3"><img src={Constant.BaseUrl + item.main_image}/><h1>{item.product_name}</h1></div>)
+  const data = props.data.map(item => 
+  <div className="m-6 h-1/6">
+    <img className="w-full object-center" src={Constant.BaseUrl + item.main_image}/>
+    <h1 className="text-left mt-2 h-9 text-sm mx-2 text-gray-700">
+      {item.product_name}
+    </h1>
+    <Link href={`/${item.id}`}><button className="w-full bg-blue-500 my-2 p-2 text-white">Detail</button></Link>
+  </div>)
 
   // useEffect(() => {
   //   console.log("Call token" + loggedIn)
@@ -29,11 +37,10 @@ export default function Home(props) {
   }
 
   return <div>
-  {!loggedIn && <HeaderNotLogin/>}
-  <div className="m-4 grid grid-cols-3" >
-    {data}
-  </div>
-    <button onClick={logoutHandler}>Logout</button>
+    <HeaderNotLogin/>
+    <div className="p-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6" >
+      {data}
+    </div>
   </div>
 
 }
