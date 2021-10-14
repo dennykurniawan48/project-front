@@ -1,10 +1,27 @@
 import CustomHead from '../components/CustomHead'
 import Link from 'next/link'
 import Modal from '../components/Modal'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import axios from 'axios'
+import { useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
+import { authAction } from '../store/auth'
+import { useRouter } from 'next/router'
 
 export default function Login() {
+
+    const loggedIn = useSelector(state => state.auth.isLoggedIn);
+    const dispatch = useDispatch()
+    const router = useRouter()
+
+    useEffect(() => {
+      console.log("Call token" + loggedIn)
+      const token = localStorage.getItem('_token')
+      if(token){
+        dispatch(authAction.login({token: token}))
+        router.replace('/')
+      }
+    }, [loggedIn])
 
     const [successRegister, setSuccessRegister] = useState(false)
     const [error, setError] = useState(null)
@@ -36,22 +53,28 @@ export default function Login() {
           })
           if(response.data){
               setError(null)
-              console.log(response)
+              localStorage.setItem('_token', response.data.data.token)
+              dispatch(authAction.login({token: response.data.data.token}))
           }
       }catch(e){
         console.log(e)
+        if(e.response){
           if(e.response.data.error){
               if(e.response.data.error.email){
                   setError(e.response.data.error.email[0])
               }else if(e.response.data.error.password){
                   setError(e.response.data.error.password[0])
               }else{
-                  setError("Error when login")
+                  setError("Error while login")
               }
           }
           else{
-            setError("Error when login")
+            setError("Error while login")
           }
+        }
+        else{
+          setError("Error while login")
+        }
           
       }finally{
           setLoading(false)
