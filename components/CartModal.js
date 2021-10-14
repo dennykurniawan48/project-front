@@ -19,7 +19,7 @@ const CartModal = (props) => {
     const data = cart.items.map(item => 
     <div className="pt-3 flex items-center text-xs font-semibold">
         <img src={Constant.BaseUrl + item.main_image} className="max-h-10 w-10 object-cover mr-2"/>
-        <span className="w-48">{item.product_name}</span>
+        <span className="w-40">{item.product_name}</span>
         <div className="text-base items-center pb-1">
             <button onClick={() => {handleDecrease(item)}} className="ml-3 mr-3 border border-gray-500 px-2">-</button> {item.qty} 
             <button onClick={() => {handleIncrease(item)}} className="ml-3 mr-3 border border-gray-500 px-2">+</button></div>

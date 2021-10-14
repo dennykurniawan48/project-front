@@ -5,13 +5,19 @@ import axios from 'axios'
 import HeaderNotLogin from '../components/HeaderNotLogin'
 import Constant from '../components/Constant'
 import Link from 'next/link'
+import { useEffect } from 'react'
 
 export default function Home(props) {
   const dispatch = useDispatch()
   const loggedIn = useSelector(state => state.auth.isLoggedIn);
-  const router = useRouter()
 
-  console.log(props.data)
+  useEffect(() => {
+    const token = localStorage.getItem('_token')
+    if(token){
+      dispatch(authAction.login({token: token}))
+    }
+  }, [loggedIn])
+
 
   const data = props.data.map(item => 
   <div className="m-6 h-1/6">

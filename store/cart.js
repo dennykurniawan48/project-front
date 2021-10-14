@@ -24,7 +24,7 @@ const cartSlice = createSlice({
         controlItem(state, action){
             const existingItem = state.items.findIndex(item => item.id === action.payload.id)
             if(existingItem != -1){
-                if(state.items[existingItem].qty === 1){
+                if(state.items[existingItem].qty === 1 && action.payload.qty === -1){
                     state.items = state.items.filter(item => item.id != action.payload.id)
                 }else{
                     state.items[existingItem].qty += action.payload.qty

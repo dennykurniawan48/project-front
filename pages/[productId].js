@@ -1,18 +1,27 @@
 import axios from "axios"
-import { useRef } from "react"
-import { useDispatch } from "react-redux"
+import { useEffect, useRef } from "react"
+import { useDispatch, useSelector } from "react-redux"
 import Constant from "../components/Constant"
 import HeaderNotLogin from "../components/HeaderNotLogin"
+import { authAction } from "../store/auth"
 import { cartAction } from "../store/cart"
 
 const DetailProduct = (props) => {
     const dispatch = useDispatch()
     const qtyRef = useRef()
+    const loggedIn = useSelector(state => state.auth.isLoggedIn);
 
     const addHandler = () => {
         console.log(props.data.main_image)
         dispatch(cartAction.addItem({id: props.data.id, price: props.data.price, qty: +qtyRef.current.value, product_name: props.data.product_name, main_image: props.data.main_image}))
     }
+
+    useEffect(() => {
+        const token = localStorage.getItem('_token')
+        if(token){
+          dispatch(authAction.login({token: token}))
+        }
+      }, [loggedIn])
 
     return <>
     <HeaderNotLogin/>

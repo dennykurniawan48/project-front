@@ -15,7 +15,6 @@ export default function Login() {
     const router = useRouter()
 
     useEffect(() => {
-      console.log("Call token" + loggedIn)
       const token = localStorage.getItem('_token')
       if(token){
         dispatch(authAction.login({token: token}))
