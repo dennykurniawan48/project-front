@@ -1,6 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { authAction } from '../store/auth'
-import { useRouter } from 'next/router'
 import axios from 'axios'
 import HeaderNotLogin from '../components/HeaderNotLogin'
 import Constant from '../components/Constant'
@@ -28,19 +27,6 @@ export default function Home(props) {
     <Link href={`/${item.id}`}><button className="w-full bg-blue-500 my-2 p-2 text-white">Detail</button></Link>
   </div>)
 
-  // useEffect(() => {
-  //   console.log("Call token" + loggedIn)
-  //   const token = localStorage.getItem('_token')
-  //   if(!token){
-  //     dispatch(authAction.logout())
-  //     router.replace('/login')
-  //   }
-  // }, [loggedIn])
-
-  const logoutHandler = () => {
-    localStorage.removeItem('_token')
-    dispatch(authAction.logout())
-  }
 
   return <div>
     <HeaderNotLogin/>

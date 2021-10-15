@@ -39,7 +39,8 @@ const CartModal = (props) => {
              </div>
                 
              <div className="overflow-auto max-h-80 grid grid-cols-1 divide-gray-400 divide-y text-base">
-             {data}
+             {cart.qty === 0 && <p className="my-4 text-center text-lg text-gray-700">Cart is empty</p>}
+             {cart.qty > 0 && data}
              </div>
              <div className="mt-6 flex justify-between px-8">
                  <button onClick={props.onClose} className="bg-red-500 py-2 px-4 rounded-md w-24 text-white">Cancel</button>
