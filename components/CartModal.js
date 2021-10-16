@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux"
 import { cartAction } from "../store/cart"
 import Constant from "./Constant"
+import Link from 'next/link'
 
 const CartModal = (props) => {
     const dispatch = useDispatch()
@@ -24,10 +25,8 @@ const CartModal = (props) => {
             <button onClick={() => {handleDecrease(item)}} className="ml-3 mr-3 border border-gray-500 px-2">-</button> {item.qty} 
             <button onClick={() => {handleIncrease(item)}} className="ml-3 mr-3 border border-gray-500 px-2">+</button></div>
     </div>)
-    console.log(data)
-    const handleCheckout = () => {
 
-    }
+  
     return (
         <div className="bg-black inset-0 fixed bg-opacity-0 text-white flex justify-center items-center">
             <div className="bg-white border-1 border-gray-500 text-gray-500 p-4 w-96">
@@ -44,7 +43,7 @@ const CartModal = (props) => {
              </div>
              <div className="mt-6 flex justify-between px-8">
                  <button onClick={props.onClose} className="bg-red-500 py-2 px-4 rounded-md w-24 text-white">Cancel</button>
-                 <button onClick={handleCheckout} className={ color + " py-2 px-4 rounded-md w-24 text-white"} disabled={isDisabled}>Checkout</button>
+                 <Link href="/checkout"><button className={ color + " py-2 px-4 rounded-md w-24 text-white"} disabled={isDisabled}>Checkout</button></Link>
              </div>
             </div>
         </div>
