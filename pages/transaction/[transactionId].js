@@ -1,24 +1,61 @@
-import { data } from "autoprefixer"
 import axios from "axios"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
 import Constant from "../../components/Constant"
 import HeaderNotLogin from "../../components/HeaderNotLogin"
+import { authAction } from "../../store/auth"
 
 const DetailTransaction = () => {
     const router = useRouter()
     const transactionId = router.query.transactionId
-    const [error, setError] = useState(null)
     const [success, setSuccess] = useState(false)
+    const [errorMessage, setErrorMessage] = useState(null)
     const [dataTransaction, setDataTransaction] = useState({})
+    const dispatch = useDispatch()
 
-    console.log(error)
+    const loggedIn = useSelector(state => state.auth.isLoggedIn)
 
-    switch(error){
-        case 404: {
-            router.push('/404')
+    useEffect(() => {
+        const token = localStorage.getItem('_token')
+        if(token){
+            dispatch(authAction.login({token}))
         }
-    }
+    }, [])
+
+    
+
+    useEffect(async () => {
+        setSuccess(false)
+        if(transactionId){
+            try{
+                const token = localStorage.getItem('_token')
+                const response = await axios.get('transaction/' + transactionId, {
+                    headers: { Authorization: `Bearer ${token}` }
+                })
+                setDataTransaction(response.data)
+                setSuccess(true)
+            }catch(e){
+                if(e.response){
+                    switch(e.response.status){
+                        case 404: {
+                            setErrorMessage("Sorry transaction not found")
+                            break;
+                        }
+                        case 403: {
+                            setErrorMessage("Sorry you dont have access to this resources")
+                            break;
+                        }
+                        case 401:{
+                            setErrorMessage("You need to login to view this resources")
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        
+    }, [transactionId, errorMessage])
 
     const totalTransaction = success ? dataTransaction.products.reduce(function(accumulator, newValue){
         return accumulator + newValue.pivot.price * newValue.pivot.qty;
@@ -37,29 +74,16 @@ const DetailTransaction = () => {
             </div>
         </div>) : null
 
-    useEffect(async () => {
-        setError(null)
-        setSuccess(false)
-        if(transactionId){
-            try{
-                const token = localStorage.getItem('_token')
-                const response = await axios.get('transaction/' + transactionId, {
-                    headers: { Authorization: `Bearer ${token}` }
-                })
-                console.log(response.data)
-                setDataTransaction(response.data)
-                setSuccess(true)
-            }catch(e){
-                if(e.response){
-                    setError(e.response.status)
-                }
-            }
-        }
-        
-    }, [transactionId])
+   
     return <>
         <HeaderNotLogin/>
-        <div className="flex items-center justify-center">
+        {!loggedIn && !errorMessage && <div className="p-2 bg-blue-700">
+            <p className="text-lg text-white">Sorry you need login to view this resources</p>
+            </div>}
+        {loggedIn && errorMessage && <div className="p-2 bg-blue-700">
+            <p className="text-lg text-white">{errorMessage}</p>
+            </div>}
+        {loggedIn && success && <div className="flex items-center justify-center">
             <div className="border-2 w-96 max-w-md md:w-4/6 grid grid-cols-1 divide-y">
                 <div class="p-2 m-3 text-center text-xl">
                     <p>Detail Transaction</p>
@@ -92,7 +116,7 @@ const DetailTransaction = () => {
                 <p className="w-24">Total: </p><p className="font-bold">${totalTransaction}</p>
                 </div>
             </div>
-        </div>
+        </div>}
         
     </>
 }

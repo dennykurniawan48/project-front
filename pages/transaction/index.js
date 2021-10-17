@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import HeaderNotLogin from "../../components/HeaderNotLogin"
 import { authAction } from "../../store/auth"
+import Link from 'next/link'
 
 const Transaction = () => {
     const route = useRouter
@@ -39,7 +40,9 @@ const Transaction = () => {
                     </div>
                 </div>
                 <div className="text-right w-20 md:w-32 font-bold">
+                    <Link href={`/transaction/${item.code_transaction}`}>
                     <button className="p-2 mr-2 bg-blue-700 text-white rounded-sm">Detail</button>
+                    </Link>
                 </div>
             </div>)
     return <>
