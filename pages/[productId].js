@@ -1,5 +1,5 @@
 import axios from "axios"
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import Constant from "../components/Constant"
 import HeaderNotLogin from "../components/HeaderNotLogin"
@@ -9,9 +9,14 @@ import { cartAction } from "../store/cart"
 const DetailProduct = (props) => {
     const dispatch = useDispatch()
     const qtyRef = useRef()
-    const loggedIn = useSelector(state => state.auth.isLoggedIn);
+    const loggedIn = useSelector(state => state.auth.isLoggedIn)
+    const [showError, setShowError] = useState(false)
 
     const addHandler = () => {
+        if(!loggedIn){
+            setShowError(true)
+            return
+        }
         if(+qtyRef.current.value <= props.data.stock){
             dispatch(cartAction.addItem({id: props.data.id, price: props.data.price, qty: +qtyRef.current.value, product_name: props.data.product_name, main_image: props.data.main_image}))
         }
@@ -40,10 +45,15 @@ const DetailProduct = (props) => {
                 <div className="rounded-md border-2 border-gray-500 p-2 mt-3 text-sm font-normal h-44">
                 {props.data.description}
                 </div>
-                <div className="flex justify-end mt-6 items-center">
-                    <label>Qty</label>
-                    <input type="number" min="1" defaultValue={1} max={props.data.stock} ref={qtyRef} className="ml-2 p-1 w-16 border-2 border-gray-400 text-center"/>
-                    <button onClick={addHandler} className="ml-2 bg-green-700 px-3 py-2 rounded-md text-white">Add To Cart</button>
+                <div className="flex justify-between mt-6 items-center">
+                    <div className="text-red-700">
+                        {showError && <p>Need to login</p>}
+                    </div>
+                    <div>
+                        <label>Qty</label>
+                        <input type="number" min="1" defaultValue={1} max={props.data.stock} ref={qtyRef} className="ml-2 p-1 w-16 border-2 border-gray-400 text-center"/>
+                        <button onClick={addHandler} className="ml-2 bg-green-700 px-3 py-2 rounded-md text-white">Add To Cart</button>
+                    </div>
                 </div>
                 </span>
             </div>
