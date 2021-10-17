@@ -32,25 +32,26 @@ const Transaction = () => {
       const items = transaction.map(item => 
             <div className=" flex justify-between items-center">
                 <div key={item.code_transaction} className="p-2 ml-3">
-                <p>{item.code_transaction}</p>
-                <div className="flex justify-between items-center">
-                    <p className="w-60">{new Date(item.created_at).toDateString()}</p>
-                    <div className="divide-x"></div>
+                    <p>{item.code_transaction}</p>
+                    <div className="flex justify-between items-center">
+                        <p className="w-60">{new Date(item.created_at).toDateString()}</p>
+                        <div className="divide-x"></div>
+                    </div>
                 </div>
-            </div>
-            <div className="text-right w-20 md:w-32 font-bold">
-            <button className="p-2 mr-2 bg-blue-700 text-white rounded-sm">Detail</button>
-        </div></div>)
+                <div className="text-right w-20 md:w-32 font-bold">
+                    <button className="p-2 mr-2 bg-blue-700 text-white rounded-sm">Detail</button>
+                </div>
+            </div>)
     return <>
     <HeaderNotLogin/>
     
     <div className="flex items-center justify-center">
     
         <div className="border-2 w-96 max-w-md md:w-4/6 grid grid-cols-1 divide-y">
-        <div class="p-2 m-3 text-center text-xl font-bold">
-           <p>List Transaction</p>
-        </div>
-         {items}
+            <div class="p-2 m-3 text-center text-xl font-bold">
+                <p>List Transaction</p>
+            </div>
+            {items}
         </div>
     </div>
 
