@@ -13,11 +13,11 @@ const Checkout = () => {
     const addressRef = useRef()
     const [error, setError] = useState(false)
 
-    const [dataCart, setDataCart] = useState([])
+    const [dataCart, setDataCart] = useState({data: []})
 
     const dataSend = cart.map(item => ({id: item.id, qty: item.qty}))
 
-    const total = dataCart.reduce(function (accumulator, currentValue) {
+    const total = dataCart.data.reduce(function (accumulator, currentValue) {
         return accumulator + currentValue.qty*currentValue.price;
     }, 0);
 
@@ -77,7 +77,7 @@ const Checkout = () => {
         }
     }, [cart])
 
-    const items = dataCart.map(item => 
+    const items = dataCart.data.map(item => 
         
    <div key={item.id} className="p-2 ml-3">
        <div className="flex">

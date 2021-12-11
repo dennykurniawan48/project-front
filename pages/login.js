@@ -84,7 +84,7 @@ export default function Login() {
     const isDisabled = loading ? "true" : ""
 
   return <>
-  <CustomHead title="Index Page"/>
+  <CustomHead title="Login Page"/>
   <div className="h-screen grid md:grid-cols-2 md:bg-gray-100">
     <div className="col-span-1 flex flex-col justify-center md:p-24 mx-8">
       <img src="/img/toko.jpg" alt="logo" className=""/>

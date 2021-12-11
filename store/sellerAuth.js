@@ -2,8 +2,8 @@ const { createSlice } = require("@reduxjs/toolkit");
 
 const initialState = { token: null, isLoggedIn: false }
 
-const authSlice = createSlice({
-    name: 'auth',
+const sellerSlice = createSlice({
+    name: 'sellerAuth',
     initialState,
     reducers: {
         login(state, action){
@@ -17,6 +17,6 @@ const authSlice = createSlice({
     }
 })
 
-export const authAction = authSlice.actions
+export const sellerAction = sellerSlice.actions
 
-export default authSlice.reducer;
+export default sellerSlice.reducer;
